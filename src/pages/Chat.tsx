@@ -64,6 +64,8 @@ const Chat: React.FC = () => {
             
             const otherUser = payload.sender === user?.data.username ? payload.recipient : payload.sender;
 
+            console.log("payload : " +JSON.stringify(payload))
+
             setConversations(prev => ({
                 ...prev,
                 [otherUser]: {
@@ -122,10 +124,12 @@ const Chat: React.FC = () => {
         setStompClient(client);
     };
     const [firstTime,setFirstTime] = useState<boolean>(true)
+    
     useEffect(() => {
         if (user?.data.username && !stompClient && !isConnecting && firstTime) {
-            connect();
             setFirstTime(false)
+            connect();
+            
         }
 
         return () => {

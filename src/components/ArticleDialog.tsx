@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useArticle } from '../hooks/articles/useGetArticleById.ts';
-import { useAddComment } from '../hooks/comments/useComment.ts';   
+import { useAddComment } from '../hooks/comments/useComment.ts';
 import type { Article } from '../types/article.d.ts';
-import type { CommentRequest } from '../types/comment.d.ts'; 
-import {useUserInfo} from '../services/auth/authService.ts';
+import type { CommentRequest } from '../types/comment.d.ts';
+import { useUserInfo } from '../services/auth/authService.ts';
 
 interface ArticleDialogProps {
     articleId: number;
@@ -21,7 +21,7 @@ const ArticleDialog: React.FC<ArticleDialogProps> = ({ articleId, onClose, isOpe
     if (!isOpen) return null;
 
     const handleSubmitComment = (e: React.FormEvent) => {
-        e.preventDefault();
+        /*e.preventDefault();
         if (!newComment.trim()) return      
         const commentData: CommentRequest = {
             content: newComment.trim(),
@@ -30,7 +30,9 @@ const ArticleDialog: React.FC<ArticleDialogProps> = ({ articleId, onClose, isOpe
         };
 
         postComment(commentData);
-        article?.comments.push(commentData) ; 
+        article?.comments.push(commentData) ; */
+        e.preventDefault();
+        console.log("articles comments : " + JSON.stringify(article?.comments))
     };
 
     const formatDate = (dateString: string) => {
@@ -67,21 +69,26 @@ const ArticleDialog: React.FC<ArticleDialogProps> = ({ articleId, onClose, isOpe
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div className="comments-section">
                                 <h3>
                                     Comments
                                     <span className="comments-count">{commentCount}</span>
                                 </h3>
-                                
+
                                 {article.comments && article.comments.length > 0 ? (
                                     <div className="comments-list">
                                         {article.comments.map(comment => (
                                             <div key={comment.id} className="comment">
+                                                <div className="comment-content">
+                                                <div className="comment-author-circle">
+                                                    {comment.user.username[0]}
+                                                </div>
                                                 <p>{comment.content}</p>
+                                                </div>
+                                                
                                                 <div className="comment-meta">
-                                                    <span>{comment.author}</span>
-                                                    <span>{formatDate(comment.createdAt)}</span>
+                                                    <span>{formatDate(comment.date)}</span>
                                                 </div>
                                             </div>
                                         ))}
@@ -97,8 +104,8 @@ const ArticleDialog: React.FC<ArticleDialogProps> = ({ articleId, onClose, isOpe
                                         placeholder="Write a comment..."
                                         rows={3}
                                     />
-                                    <button 
-                                        type="submit" 
+                                    <button
+                                        type="submit"
                                         disabled={isPending || !newComment.trim()}
                                         className="submit-comment"
                                     >

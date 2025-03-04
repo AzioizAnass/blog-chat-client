@@ -18,7 +18,6 @@ const Navbar: React.FC = () => {
             <div className="nav-links">
                 <Link to="/blog" className="nav-link">Articles</Link>
                 <Link to="/chat" className="nav-link">Chat</Link>
-                <Link to="/profile" className="nav-link">My Profile</Link>
                 <button onClick={handleLogout} className="nav-link logout-btn">
                     Logout
                 </button>
