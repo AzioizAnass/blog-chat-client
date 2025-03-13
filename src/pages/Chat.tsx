@@ -17,7 +17,8 @@ const Chat: React.FC = () => {
     const [isConnecting, setIsConnecting] = useState(false);
     const messageAreaRef = useRef<HTMLDivElement>(null);
     const token = localStorage.getItem("token")
-    const [user,setUser] = useState<User>(useUserInfo(token)) ;  
+    const [user,setUser] = useState<User>(useUserInfo(token)) ;
+    const firstTimeRef = useRef(true);  
 
     
     const handlePublicMessage = (message: any) => {
@@ -83,7 +84,7 @@ const Chat: React.FC = () => {
 
         setIsConnecting(true);
         const client = new Client({
-            webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
+            webSocketFactory: () => new SockJS(process.env.REACT_APP_API_URL+'/ws'),
             debug: (str) => {
                 console.log('STOMP Debug:', str);
             },
@@ -123,11 +124,10 @@ const Chat: React.FC = () => {
         client.activate();
         setStompClient(client);
     };
-    const [firstTime,setFirstTime] = useState<boolean>(true)
     
     useEffect(() => {
-        if (user?.data.username && !stompClient && !isConnecting && firstTime) {
-            setFirstTime(false)
+        if (user?.data.username && !stompClient && !isConnecting && firstTimeRef.current) {
+            firstTimeRef.current = false; 
             connect();
             
         }

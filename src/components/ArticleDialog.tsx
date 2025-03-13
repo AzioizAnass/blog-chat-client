@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useRef } from 'react';
 import { useArticle } from '../hooks/articles/useGetArticleById.ts';
 import { useAddComment } from '../hooks/comments/useComment.ts';
 import type { Article } from '../types/article.d.ts';
@@ -17,22 +17,29 @@ const ArticleDialog: React.FC<ArticleDialogProps> = ({ articleId, onClose, isOpe
     const [newComment, setNewComment] = useState<string>('');
     const token = localStorage.getItem('token');
     const currentUser = useUserInfo(token);
-
+    const commentsRef = useRef<HTMLDivElement>();
     if (!isOpen) return null;
 
     const handleSubmitComment = (e: React.FormEvent) => {
-        /*e.preventDefault();
-        if (!newComment.trim()) return      
+        e.preventDefault();
+        if (!newComment.trim()) return  
+            
         const commentData: CommentRequest = {
             content: newComment.trim(),
             article: { id: articleId },
-            user: { id: parseInt(currentUser.data.id) }
+            user: { 
+                id: parseInt(currentUser.data.id) ,
+                username :currentUser.data.username
+                }
         };
-
+        article?.comments.push(commentData) 
         postComment(commentData);
-        article?.comments.push(commentData) ; */
-        e.preventDefault();
-        console.log("articles comments : " + JSON.stringify(article?.comments))
+        setNewComment("");
+        setTimeout(() => {
+            if (commentsRef.current) {
+                commentsRef.current.scrollTop = commentsRef.current.scrollHeight;
+            }
+        }, 0); 
     };
 
     const formatDate = (dateString: string) => {
@@ -70,14 +77,14 @@ const ArticleDialog: React.FC<ArticleDialogProps> = ({ articleId, onClose, isOpe
                                 </div>
                             </div>
 
-                            <div className="comments-section">
+                            <div className="comments-section" ref={commentsRef}>
                                 <h3>
                                     Comments
-                                    <span className="comments-count">{commentCount}</span>
+                                    <span className="comments-count" >{commentCount}</span>
                                 </h3>
 
                                 {article.comments && article.comments.length > 0 ? (
-                                    <div className="comments-list">
+                                    <div className="comments-list" >
                                         {article.comments.map(comment => (
                                             <div key={comment.id} className="comment">
                                                 <div className="comment-content">

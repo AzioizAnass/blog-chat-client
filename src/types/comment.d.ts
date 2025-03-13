@@ -11,7 +11,7 @@ export interface Comment {
 export interface CommentRequest {
   content: string;
   article: { id: number };
-  user: { id: number };
+  user: { id: number ,username:string};
 }
 
 export interface CommentResponse {
