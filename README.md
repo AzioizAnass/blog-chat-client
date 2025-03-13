@@ -57,7 +57,7 @@ The chat feature allows users to communicate with each other in real-time. The s
 ## Technologies Used 🧰
    Frontend: TypeScript, React JS ⚛️, Tailwind CSS 🌿
    Backend: Spring Boot 🚀 (see the backend repository)
-   Real-Time Communication: WebSockets / Firebase 🔌
+   Real-Time Communication: WebSockets /
    Authentication: JWT (JSON Web Token) 🔒
 
 ## Acknowledgments 🙏
